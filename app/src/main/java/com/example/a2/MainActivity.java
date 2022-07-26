@@ -1,56 +1,45 @@
 package com.example.a2;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import android.graphics.ImageDecoder;
-import android.graphics.drawable.AnimatedImageDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.app.Activity;
+import java.util.Random;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
-import java.io.IOException;
+import android.widget.RelativeLayout;
+import android.graphics.Color;
+import android.widget.Button;
+import android.widget.FrameLayout.LayoutParams;
 
-public class MainActivity extends AppCompatActivity {
 
-    @RequiresApi(api = Build.VERSION_CODES.P)
+public class MainActivity extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView imageView = findViewById(R.id.splash);
+          Random rnd = new Random();
+          Button addButton = (Button) findViewById(R.id.Button);
 
-        loadGif(imageView);
-    }
+          RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rect);
 
-    @RequiresApi(api = Build.VERSION_CODES.P)
-    private void loadGif(ImageView iv) {
-        try {
-            ImageDecoder.Source source =
-                    ImageDecoder.createSource(getResources(), R.drawable.ic_splash);
+            addButton.setOnClickListener(new View.OnClickListener() {
+               @Override
+              public void onClick(View v) {
+        ImageView imageView = new ImageView(MainActivity.this);
+        imageView.setImageResource(R.drawable.box);
+        LayoutParams imageViewLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-            Drawable drawable = ImageDecoder.decodeDrawable(source);
-            iv.setImageDrawable(drawable);
+        imageView.setLayoutParams(imageViewLayoutParams);
+        imageViewLayoutParams.setMargins(200, 1, 12, 12);
 
-            if (drawable instanceof AnimatedImageDrawable) {
-                ((AnimatedImageDrawable) drawable).start();
-                Toast.makeText(getApplicationContext(),
-                        "Animation started",
-                        Toast.LENGTH_LONG).show();
-            }
-            else Toast.makeText(getApplicationContext(),
-                    "Animation not working!!!",
-                    Toast.LENGTH_LONG).show();
+            imageView.setColorFilter((Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))));
+            mainLayout.addView(imageView);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(),
-                    "IOException: \n" + e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        }
+
+             }
+           });
     }
 }
-
 
 
