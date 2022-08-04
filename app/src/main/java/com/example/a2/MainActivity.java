@@ -1,45 +1,54 @@
 package com.example.a2;
 
-import android.app.Activity;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.graphics.Color;
-import android.widget.Button;
-import android.widget.FrameLayout.LayoutParams;
+import androidx.appcompat.app.AppCompatActivity;
 
 
-public class MainActivity extends Activity {
-
+public class MainActivity extends AppCompatActivity {
+    Random rnd = new Random();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        Timer myTimer;
+        myTimer = new Timer();
 
-          Random rnd = new Random();
-          Button addButton = (Button) findViewById(R.id.Button);
+        myTimer.schedule(new TimerTask() {
+            public void run() {
+                timerTick();
+            }
+        }, 0, 1000);
+    }
 
-          RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rect);
+    private void timerTick() {
+        this.runOnUiThread(doTask);
+    }
 
-            addButton.setOnClickListener(new View.OnClickListener() {
-               @Override
-              public void onClick(View v) {
+    private Runnable doTask = new Runnable() {
+        public void run() {
+
+            CreateRect();
+        }
+    };
+
+    private void CreateRect() {
+
+        RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rect);
         ImageView imageView = new ImageView(MainActivity.this);
         imageView.setImageResource(R.drawable.box);
-        LayoutParams imageViewLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
+        RelativeLayout.LayoutParams imageViewLayoutParams = new RelativeLayout.LayoutParams(rnd.nextInt(256), rnd.nextInt(256));
+        imageViewLayoutParams.setMargins(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         imageView.setLayoutParams(imageViewLayoutParams);
-        imageViewLayoutParams.setMargins(200, 1, 12, 12);
-
-            imageView.setColorFilter((Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))));
-            mainLayout.addView(imageView);
-
-
-             }
-           });
+        imageView.setColorFilter(Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
+        mainLayout.addView(imageView);
     }
 }
-
-
