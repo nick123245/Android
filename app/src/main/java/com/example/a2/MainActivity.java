@@ -1,8 +1,10 @@
 package com.example.a2;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -12,32 +14,29 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class MainActivity extends AppCompatActivity {
-    int shadow = 9;
+
     int gridSize = 12;
     int shadowWidth = 9;
     int shadowHeight = 9;
     final int MINCELLSIZE = 16;
     final int MINRECTSIZE = 6;
-    final int THRESHOLD = 100;
-    int timeLeft = 0;
-    int sway = 30;
-    int curColor = 0;
-    int curBase = curColor;
-    int tweak = 20;
-    int ncolors = 2;
-  // RelativeLayout mainLayout = (RelativeLayout)findViewById(R.id.rect);
-    // ArrayList<ImageView> im = new ArrayList<ImageView>();
+
+    ArrayList<ImageView> im = new ArrayList<ImageView>();
     Random rnd = new Random();
     int r = rnd.nextInt(256);
     int g = rnd.nextInt(256);
     int b = rnd.nextInt(256);
+    int cellsWide, cellsHigh;
+    int thresholdcountLay = 20;
+    int cellWidth;
+    int cellHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        
+
         Timer myTimer;
         myTimer = new Timer();
 
@@ -58,24 +57,12 @@ public class MainActivity extends AppCompatActivity {
             paint();
         }
     };
-    
 
-    // im.add(imageView);
-
-//            if (im.size() > 4) {
-//                ImageView firstElofList = im.get(0);
-//                mainLayout.removeView(firstElofList);
-//                im.remove(0);
-//            }
-//        }
-    // mainLayout.removeView(imageView);
-
-//    }
 
     void paint() {
         RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rect);
-        int i;
-        int cellsWide, cellsHigh, cellWidth, cellHeight;
+
+        // int cellWidth, cellHeight;
         int width = mainLayout.getWidth();
         int height = mainLayout.getHeight();
 
@@ -93,15 +80,15 @@ public class MainActivity extends AppCompatActivity {
 
         if (cellHeight < MINCELLSIZE) {
             cellHeight = MINCELLSIZE;
-            cellsHigh = width / cellWidth;
+            cellsHigh = height / cellHeight;
         }
 
-        for (i = 0; i < cellsHigh; i++) {
-            int j;
+        for (int i = 0; i < cellsHigh; i++) {
+
 
             int colorRect = genNewColor();
-        
-            for (j = 0; j < cellsWide; j++) {
+
+            for (int j = 0; j < cellsWide; j++) {
                 int curWidth, curHeight, curX, curY;
 
                 curHeight = rnd.nextInt(255) % cellHeight;
@@ -115,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
                 curY = (i * cellHeight) + (rnd.nextInt(255) % (cellHeight - curHeight));
                 curX = (j * cellWidth) + (rnd.nextInt(255) % (cellWidth - curWidth));
-         
+
                 int colorShadow = Color.BLACK;
                 XFillRectangle(colorShadow, curX, curY, curWidth + shadowWidth, curHeight + shadowHeight);
                 XFillRectangle(colorRect, curX, curY, curWidth, curHeight);
@@ -153,6 +140,22 @@ public class MainActivity extends AppCompatActivity {
         imageViewLayoutParams.setMargins(curX, curY, 0, 0);
         imageView.setLayoutParams(imageViewLayoutParams);
 
+        addRects(mainLayout, imageView);
+        remRects(mainLayout);
+
+
+    }
+    void addRects(RelativeLayout mainLayout, ImageView imageView) {
         mainLayout.addView(imageView);
+        im.add(imageView);
+    }
+    void remRects(RelativeLayout mainLayout) {
+        if (im.size() > (cellsHigh * cellsWide) * 2 * thresholdcountLay ) {
+            for (int k = 0; k < (cellsHigh * cellsWide) * 2; k++) {
+                ImageView firstElofList = im.get(0);
+                mainLayout.removeView(firstElofList);
+                im.remove(0);
+            }
+        }
     }
 }
