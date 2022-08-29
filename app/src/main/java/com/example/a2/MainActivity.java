@@ -17,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
     final int MINCELLSIZE = 16;
     final int MINRECTSIZE = 6;
-
     ArrayList<ImageView> im = new ArrayList<ImageView>();
+    ArrayList<Integer> RectLay = new ArrayList<>();
     Random rnd = new Random();
 
 
@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     void paint(state st) {
         RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rect);
+        int countRect = 0;
 
         int width = mainLayout.getWidth();
         int height = mainLayout.getHeight();
@@ -116,8 +117,11 @@ public class MainActivity extends AppCompatActivity {
                 int colorShadow = ColorUtils.blendARGB(colorRect, Color.BLACK, 0.2f);
                 XFillRectangle(st, colorShadow, curX, curY, curWidth + st.shadowWidth, curHeight + st.shadowHeight);
                 XFillRectangle(st, colorRect, curX, curY, curWidth, curHeight);
+                countRect++;
+
             }
         }
+        RectLay.add(countRect);
     }
     int genNewColor(state st) {
         int color = Color.argb(255, st.red, st.green, st.blue);
@@ -150,23 +154,26 @@ public class MainActivity extends AppCompatActivity {
         imageViewLayoutParams.setMargins(curX, curY, 0, 0);
         imageView.setLayoutParams(imageViewLayoutParams);
 
-        addRects(mainLayout, imageView);
-        remRects(st, mainLayout);
+        addReacts(mainLayout, imageView);
+        remReacts(st, mainLayout);
 
 
     }
-    void addRects(RelativeLayout mainLayout, ImageView imageView) {
+    void addReacts(RelativeLayout mainLayout, ImageView imageView) {
         mainLayout.addView(imageView);
         im.add(imageView);
     }
-    void remRects(state st, RelativeLayout mainLayout) {
-        if (im.size() > (st.cellsHigh * st.cellsWide) * 2 * st.thresholdcountLay ) {
-            for (int k = 0; k < (st.cellsHigh * st.cellsWide) * 2; k++) {
-                ImageView firstElofList = im.get(0);
-                mainLayout.removeView(firstElofList);
+    void remReacts(state st, RelativeLayout mainLayout) {
+        if (RectLay.size() > st.thresholdcountLay) {
+            for (int k = 0; k < RectLay.get(0) * 2; k++) {
+                ImageView firstViewElofList = im.get(0);
+                mainLayout.removeView(firstViewElofList);
                 im.remove(0);
+
             }
+            RectLay.remove(0);
         }
     }
 }
+
 
