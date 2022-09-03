@@ -1,0 +1,19 @@
+package com.example.a2;
+
+public class State {
+
+    int thresholdcountLay;
+    int gridSize;
+    int shadowWidth;
+    int shadowHeight;
+
+    int red;
+    int green;
+    int blue;
+
+    int cellsWide;
+    int cellsHigh;
+
+    int cellWidth;
+    int cellHeight;
+}
