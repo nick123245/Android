@@ -22,9 +22,9 @@ public class MainActivity extends AppCompatActivity {
     Random rnd = new Random();
 
 
-    state cynosure_init () {
+    State cynosure_init () {
 
-        state st = new state();
+        State st = new State();
         st.thresholdcountLay = 20;
         st.gridSize = 12;
         st.shadowWidth = 9;
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private Runnable doTask = new Runnable() {
-        final state st = cynosure_init();
+        final State st = cynosure_init();
         public void run() {
 
             paint(st);
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     };
 
 
-    void paint(state st) {
+    void paint(State st) {
         RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rect);
         int countRect = 0;
 
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
         RectLay.add(countRect);
     }
-    int genNewColor(state st) {
+    int genNewColor(State st) {
         int color = Color.argb(255, st.red, st.green, st.blue);
         if(st.red > 255) st.red--;
         else st.red++;
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         return (n < 255 ? n : 255);
     }
 
-    void XFillRectangle(state st, int color, int curX, int curY, int curWidth, int curHeight) {
+    void XFillRectangle(State st, int color, int curX, int curY, int curWidth, int curHeight) {
 
         RelativeLayout mainLayout = (RelativeLayout) findViewById(R.id.rect);
         ImageView imageView = new ImageView(MainActivity.this);
@@ -163,7 +163,8 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.addView(imageView);
         im.add(imageView);
     }
-    void remReacts(state st, RelativeLayout mainLayout) {
+    void remReacts(State st, RelativeLayout mainLayout) {
+
         if (RectLay.size() > st.thresholdcountLay) {
             for (int k = 0; k < RectLay.get(0) * 2; k++) {
                 ImageView firstViewElofList = im.get(0);
@@ -175,5 +176,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
 
